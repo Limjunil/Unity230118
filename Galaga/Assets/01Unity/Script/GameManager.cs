@@ -16,11 +16,18 @@ public class GameManager : MonoBehaviour
     private GameObject scorehighnowTxtObj = default;
     private GameObject scorehighTxtObj = default;
 
+    //!< 현재 체력을 표시할 텍스트
+    private GameObject HpvalueTxtObj = default;
+
 
     private const string SCENE_NAME = "PlayScene";
     private const string BEST_SCORE = "BestScore";
     // 점수
-    private static float scoreNow = default;
+    private float scoreNow = default;
+
+    // 체력
+    private float HpvalueCut = default;
+
 
     // 게임 오버 상태
     private bool isGameOver = false;
@@ -37,11 +44,18 @@ public class GameManager : MonoBehaviour
         gameOverTxtObj = uiObjs_.FindChildObj("gameoverTxt");
         scorehighnowTxtObj = uiObjs_.FindChildObj("scorehighnow");
         scorehighTxtObj = uiObjs_.FindChildObj("scorehigh");
-
+        HpvalueTxtObj = uiObjs_.FindChildObj("Hpvalue");
 
         // } 출력할 텍스트 오브젝트를 찾아온다.
 
+        HpvalueCut = 0f;
+        PlayerPrefs.SetFloat("Hpvalue", 3f);
+
         scoreNow = 0f;
+        PlayerPrefs.SetFloat("scoreNow", scoreNow);
+
+        PlayerPrefs.SetFloat("enemycnt", 0f);
+
         isGameOver = false;
 
         gameOverTxtObj.transform.localScale = new Vector3(0.0001f, 0.0001f, 0.0001f);
@@ -69,15 +83,19 @@ public class GameManager : MonoBehaviour
 
 
         // 현재 점수를 갱신한다.
-        float ScoreNow = PlayerPrefs.GetFloat("scoreNow");
+        scoreNow = PlayerPrefs.GetFloat("scoreNow");
 
-        scoreNow = ScoreNow;
-
-        GFunc.SetTxt(scoreNowTxtObj, $"현재 스코어 : {ScoreNow}");
+        GFunc.SetTxt(scoreNowTxtObj, $"현재 스코어 : {scoreNow}");
 
         float bestScore = PlayerPrefs.GetFloat(BEST_SCORE);
 
         GFunc.SetTxt(scorehighTxtObj, $"최고 스코어\n{bestScore}");
+
+        // 현재 체력을 갱신한다.
+
+        HpvalueCut = PlayerPrefs.GetFloat("Hpvalue");
+
+        GFunc.SetTxt(HpvalueTxtObj, $"현재 체력 : {HpvalueCut}");
 
     }
 
@@ -105,5 +123,10 @@ public class GameManager : MonoBehaviour
         GFunc.SetTxt(scorehighnowTxtObj, $"Best Score : {bestScore}");
         GFunc.SetTxt(scorehighTxtObj, $"최고 스코어\n{bestScore}");
 
+    }
+
+    public static void BestSocreReset()
+    {
+        PlayerPrefs.SetFloat(BEST_SCORE, 0f);
     }
 }

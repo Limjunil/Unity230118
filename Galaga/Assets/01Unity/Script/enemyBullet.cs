@@ -40,9 +40,22 @@ public class enemyBullet : MonoBehaviour
                 return;
             }
 
-            // 플레이어의 컨트롤을 정상적으로 가져온 경우
-            // 총알을 맞은 플레이어는 죽는다.
-            player.Die();
+            gameObject.SetActive(false);
+
+            float damage = PlayerPrefs.GetFloat("Hpvalue");
+            damage -= 1f;
+
+            if (damage == 0)
+            {
+                PlayerPrefs.SetFloat("Hpvalue", damage);
+                // 플레이어의 컨트롤을 정상적으로 가져온 경우
+                // 총알을 맞은 플레이어는 죽는다.
+                player.Die();
+            }
+            else
+            {
+                PlayerPrefs.SetFloat("Hpvalue", damage);
+            }
         }
         else if (other.tag.Equals("Wall"))
         {

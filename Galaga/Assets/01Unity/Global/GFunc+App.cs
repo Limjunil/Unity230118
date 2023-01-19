@@ -11,8 +11,10 @@ public static partial class GFunc
         #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
         #else
+        GameManager.BestSocreReset();
         Application.Quit();
         #endif
+
     } // QuitThisGame()
 
 
@@ -20,6 +22,5 @@ public static partial class GFunc
     public static void LoadScene(string sceneName_)
     {
         SceneManager.LoadScene(sceneName_);
-
     } // LoadScene
 }

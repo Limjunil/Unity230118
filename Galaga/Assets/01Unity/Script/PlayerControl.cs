@@ -28,6 +28,8 @@ public class PlayerControl : MonoBehaviour
 
     private float timeAfterSpawn = 0f;
 
+    [SerializeField]
+    private StageData stageData;
 
 
     // Start is called before the first frame update
@@ -53,7 +55,6 @@ public class PlayerControl : MonoBehaviour
     {
         float xInput = Input.GetAxis("Horizontal");
         
-
         float xSpeed = xInput * PLAYER_SPEED;
 
         Vector3 newVelocity = new Vector3(xSpeed, 0f, 0f);
@@ -95,16 +96,6 @@ public class PlayerControl : MonoBehaviour
     } // Update()
 
 
-    public void OnTriggerEnter(Collider other)
-    {
-
-        if (other.tag.Equals("enemyBullet"))
-        {
-            // 적에게 맞추면 다시 false 처리
-            gameObject.SetActive(false);
-
-        }
-    }
 
     //! 플레이어가 사망했을 때 호출하는 함수
     public void Die()
@@ -119,4 +110,13 @@ public class PlayerControl : MonoBehaviour
 
 
     }   // Die()
+
+
+    //! 플레이어의 이동 제한
+    private void LateUpdate()
+    {
+        // 플레이어 캐릭터가 화면 범위 바깥으로 나가지 못하게 한다.
+        transform.position = new Vector3(Mathf.Clamp(transform.position.x,
+            stageData.LimitMin.x, stageData.LimitMax.x), 0f, -9f);
+    }
 }

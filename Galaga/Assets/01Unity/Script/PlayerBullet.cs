@@ -10,9 +10,12 @@ public class PlayerBullet : MonoBehaviour
 
     private Rigidbody playerbulletRgBody = default;
 
+
+
     // Start is called before the first frame update
     void Start()
     {
+
         playerbulletRgBody = gameObject.GetComponent<Rigidbody>();
 
         playerbulletRgBody.velocity = transform.up * playerBulletspeed;
@@ -26,10 +29,6 @@ public class PlayerBullet : MonoBehaviour
     }
 
 
-    public void PlayerFire()
-    {
-        
-    }
 
     public void OnTriggerEnter(Collider other)
     {
@@ -40,8 +39,17 @@ public class PlayerBullet : MonoBehaviour
             gameObject.SetActive(false);
 
         }
-        else if(other.tag.Equals("enemy"))
+        
+        if(other.tag.Equals("enemy"))
         {
+
+            float Updatescore = PlayerPrefs.GetFloat("scoreNow");
+            Updatescore += 1f;
+
+            PlayerPrefs.SetFloat("scoreNow", Updatescore);
+
+            GFunc.ChkenemyCnt();
+
             // 적에게 맞추면 다시 false 처리
             gameObject.SetActive(false);
         }

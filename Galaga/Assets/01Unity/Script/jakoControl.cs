@@ -1,24 +1,24 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Schema;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class jakoControl : MonoBehaviour
 {
 
     private Rigidbody enemyRigbody = default;
-    
-    private const float ENEMY_SPEED = 9.0f;
 
+    
     // 적이 탄알을 쏘기
     public GameObject enemyBulletPrefab;
-    public int count = 15;
-    public float fireRate = 1000.0f; // 최초 생성 주기
+    public int count;
+    public float fireRate = 0.8f; // 최초 생성 주기
 
     public float xValue = 0f;
     public float zValue = 0f;
-
-    private float scoreNow = 0f;
-
+    public bool movechk = false;
 
     private GameObject[] enemyjakobullets; // 미리 생성할 탄알들
 
@@ -28,14 +28,23 @@ public class jakoControl : MonoBehaviour
 
     private float timeAfterSpawn = 0f;
 
+    public float xMin = 0f;
+    public float xMax = 0f;
 
     // Start is called before the first frame update
     void Start()
     {
-        scoreNow = 0f;
-        PlayerPrefs.SetFloat("scoreNow", scoreNow);
+        fireRate = 0.8f;
+
+        count = 20;
+        movechk = false;
+
+        xMin = -18f;
+        xMax = 18f;
 
         enemyRigbody = gameObject.GetComponent<Rigidbody>();
+
+        
 
         enemyjakobullets = new GameObject[count];
 
@@ -51,19 +60,13 @@ public class jakoControl : MonoBehaviour
     void Update()
     {
         
-
-
-        //float xSpeed = xInput * ENEMY_SPEED;
-
-        //Vector3 newVelocity = new Vector3(xSpeed, 0f, 0f);
-
-        //enemyRigbody.velocity = newVelocity;
-
         timeAfterSpawn += Time.deltaTime;
 
         // 탄알 쏘는 조건
         if (fireRate < timeAfterSpawn)
         {
+            Actjako();
+
             timeAfterSpawn = 0f;
 
             if (15 <= bulletCount)
@@ -71,8 +74,10 @@ public class jakoControl : MonoBehaviour
                 bulletCount = 0;
             }
 
+
             xValue = gameObject.transform.position.x;
             zValue = gameObject.transform.position.z;
+
 
 
             enemyjakobullets[bulletCount].transform.position = new Vector3(xValue, 0, zValue - 1f);
@@ -81,7 +86,54 @@ public class jakoControl : MonoBehaviour
             bulletCount++;
 
 
+
         }
+
+    }
+
+    private void OnDisable()
+    {
+        timeAfterSpawn = 0;
+    }
+
+    public void Actjako()
+    {
+        
+        float xchk = gameObject.transform.position.x;
+        float zchk = gameObject.transform.position.z;
+
+
+        if (xMin >= xchk)
+        {
+            movechk = true;
+        }
+        else if (xMax <= xchk)
+        {
+            movechk = false;
+        }
+
+
+
+        if (movechk == false)
+        {
+            if(xMax <= xchk)
+            {
+                zchk -= 2f;
+            }
+            xchk -= 2f;
+            gameObject.transform.position = new Vector3(xchk, 0f, zchk);
+        }
+        else
+        {
+            if(xMin >= xchk)
+            {
+                zchk -= 2f;
+
+            }
+            xchk += 2f;
+            gameObject.transform.position = new Vector3(xchk, 0f, zchk);
+        }
+
     }
 
 
@@ -91,21 +143,12 @@ public class jakoControl : MonoBehaviour
 
         if (other.tag.Equals("PlayerBullet"))
         {
-            
-            PlayerBullet playerBullet = other.GetComponent<PlayerBullet>();
 
-            if (playerBullet == null || playerBullet == default)
-            {
-                return;
-            }
-            else
-            {
-                scoreNow += 1f;
-                PlayerPrefs.SetFloat("scoreNow", scoreNow);
-            }
-
-            // 적에게 맞추면 다시 false 처리
+            movechk = false;
+            // 다시 false 처리
             gameObject.SetActive(false);
         }
     }
+
+
 }

@@ -61,4 +61,16 @@ public static partial class GFunc
         Scene activeScene_ = SceneManager.GetActiveScene();
         return activeScene_;
     }
+
+
+    //! 현재 적의 수를 체크하는 함수
+
+    public static void ChkenemyCnt()
+    {
+        float enemycnt = PlayerPrefs.GetFloat("enemycnt");
+        enemycnt += 1f;
+
+        PlayerPrefs.SetFloat("enemycnt", enemycnt);
+
+    }
 }
