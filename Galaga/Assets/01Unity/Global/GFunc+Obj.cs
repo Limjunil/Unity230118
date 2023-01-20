@@ -27,6 +27,13 @@ public static partial class GFunc
             }
         } // loop
 
+        // 방어로직
+        if (searchResult == null || searchResult == default) { /* Do Nothing */ }
+        else
+        {
+            return searchResult;
+        }
+
         return searchResult;
     } // FindChildObj()
 
