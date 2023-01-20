@@ -119,4 +119,5 @@ public class PlayerControl : MonoBehaviour
         transform.position = new Vector3(Mathf.Clamp(transform.position.x,
             stageData.LimitMin.x, stageData.LimitMax.x), 0f, -9f);
     }
+
 }

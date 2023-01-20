@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class enemyBullet : MonoBehaviour
 {
+    public GameObject player;
 
     public float enemyBulletspeed = 8.0f;
 
@@ -17,6 +18,8 @@ public class enemyBullet : MonoBehaviour
         enemyBulletspeed = 8.0f;
 
         enemybulletRgBody = gameObject.GetComponent<Rigidbody>();
+
+        player = GameObject.FindWithTag("Player");
 
         enemybulletRgBody.velocity = transform.up * enemyBulletspeed;
     }
@@ -42,7 +45,11 @@ public class enemyBullet : MonoBehaviour
 
             gameObject.SetActive(false);
 
+
             float damage = PlayerPrefs.GetFloat("Hpvalue");
+
+            player.gameObject.SetActive(false);
+
             damage -= 1f;
 
             if (damage == 0)
@@ -55,6 +62,10 @@ public class enemyBullet : MonoBehaviour
             else
             {
                 PlayerPrefs.SetFloat("Hpvalue", damage);
+
+                // Deleyplayer() 함수를 0.5초 후 실행
+                Invoke("Deleyplayer", 0.5f);
+
             }
         }
         else if (other.tag.Equals("Wall"))
@@ -63,5 +74,10 @@ public class enemyBullet : MonoBehaviour
             gameObject.SetActive(false);
 
         }
+    }
+
+    void Deleyplayer()
+    {
+        player.gameObject.SetActive(true);
     }
 }

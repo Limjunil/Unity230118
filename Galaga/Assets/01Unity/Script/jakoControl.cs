@@ -31,6 +31,7 @@ public class jakoControl : MonoBehaviour
     public float xMin = 0f;
     public float xMax = 0f;
 
+
     // Start is called before the first frame update
     void Start()
     {
@@ -43,9 +44,7 @@ public class jakoControl : MonoBehaviour
         xMax = 18f;
 
         enemyRigbody = gameObject.GetComponent<Rigidbody>();
-
-        
-
+       
         enemyjakobullets = new GameObject[count];
 
         for (int i = 0; i < count; i++)
@@ -79,9 +78,11 @@ public class jakoControl : MonoBehaviour
             zValue = gameObject.transform.position.z;
 
 
-
             enemyjakobullets[bulletCount].transform.position = new Vector3(xValue, 0, zValue - 1f);
+
             enemyjakobullets[bulletCount].transform.rotation = Quaternion.Euler(90, 180, 0);
+
+
             enemyjakobullets[bulletCount].SetActive(true);
             bulletCount++;
 
